@@ -22,6 +22,16 @@ module Cxeed
       cred.store
     end
 
+    desc 'cred', 'show credential'
+    def cred
+      cred = Cxeed::Credential.new
+
+      say "login url    : #{ cred.login_url }"
+      say "company code : #{ cred.company_code }"
+      say "employee code: #{ cred.employee_code }"
+      say "password     : #{ cred.password }"
+    end
+
     desc 'login_test', 'login_test'
     def login_test
       cred = Cxeed::Credential.new
