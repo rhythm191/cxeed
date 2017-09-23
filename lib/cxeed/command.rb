@@ -1,13 +1,8 @@
 require 'thor'
-require 'cxeed/credential'
+require 'cxeed'
 
 module Cxeed
   class Command < Thor
-    desc "hello NAME", "say hello to NAME"
-    def hello(name)
-      puts "Hello #{name}"
-    end
-
     desc 'init', 'initialize credential'
     def init
       cred = Cxeed::Credential.new
@@ -25,6 +20,18 @@ module Cxeed
       cred.password = password
 
       cred.store
+    end
+
+    desc 'login_test', 'login_test'
+    def login_test
+      cred = Cxeed::Credential.new
+      proxy = Cxeed::Proxy.new cred
+
+      if proxy.login_test == 'https://cxg2.i-abs.co.jp/cyberx/Xgw0001.asp?CxClientDispFlg=0'
+        say 'login success'
+      else
+        say 'login fail'
+      end
     end
   end
 end
