@@ -8,7 +8,7 @@ module Cxeed
       @credential = credential
     end
 
-    def login_test
+    def login
       @driver.navigate.to(@credential.login_url)
 
       # 会社コード入力
@@ -19,6 +19,10 @@ module Cxeed
       @driver.find_element(:name, 'PassWord').send_keys(@credential.password)
       # ログイン処理
       @driver.find_element(:xpath, '//td[@class="loginBtn"]/a').click
+    end
+
+    def login_test
+      login
 
       @driver.current_url
     end
