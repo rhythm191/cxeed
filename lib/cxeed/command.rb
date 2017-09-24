@@ -43,5 +43,25 @@ module Cxeed
         say 'login fail'
       end
     end
+
+    desc 'arrive [time]', 'submit arrival time (time format is "%H:%M")'
+    def arrive(time = Time.now.strftime('%H:%M'))
+      cred = Cxeed::Credential.new
+      proxy = Cxeed::Proxy.new cred
+
+      proxy.arrive time
+
+      puts "arrive #{ time}"
+    end
+
+    desc 'leave [time]', 'submit leave time (time format is "%H:%M")'
+    def leave(time = Time.now.strftime('%H:%M'))
+      cred = Cxeed::Credential.new
+      proxy = Cxeed::Proxy.new cred
+
+      proxy.leave time
+
+      puts "leave #{ time}"
+    end
   end
 end
