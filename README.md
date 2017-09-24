@@ -4,14 +4,17 @@ CYBER XEED ruby client
 
 ## Installation
 
-install phantomjs
+install chrome driver
 
-    $ brew install phantomjs
+    $ brew install chromedriver
 
 
 install it yourself as:
 
     $ gem install cxeed
+    or
+    $ gem install specific_install
+    $ gem specific_install https://github.com/rhythm191/cxeed.git master
 
 
 ## Usage
@@ -24,6 +27,18 @@ install it yourself as:
 認証情報が正しいかどうか確認します。
 
     $ cxeed login_test
+
+出社を報告します
+
+    $ cxeed arrive
+    or
+    $ cxeed arrive 10:00
+    
+退社を報告します
+
+    $ cxeed leave
+    or
+    $ cxeed leave 19:00
 
 
 ## Development
