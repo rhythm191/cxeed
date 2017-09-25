@@ -25,20 +25,29 @@ install it yourself as:
     $ cxeed init
 
 認証情報が正しいかどうか確認します。
+エラーが出た場合はinitのいずれかのパラメータが異なります。
 
     $ cxeed login_test
 
-出社を報告します
+出社を報告します。引数なしで現在の時刻を入力します。
 
     $ cxeed arrive
     or
     $ cxeed arrive 10:00
     
-退社を報告します
+退社を報告します。引数なしで現在の時刻を入力します。
 
     $ cxeed leave
     or
     $ cxeed leave 19:00
+
+今日の勤怠を見ます。
+
+    $ cxeed today
+    
+任意の日時の勤怠を見ます。
+
+    $ cxeed attendance
 
 
 ## Development
