@@ -7,9 +7,18 @@ module Cxeed
 
     def initialize(date, arrive_at, leave_at)
       @date = Time.parse(date, Time.now)
-      @arrive_at = Time.parse(arrive_at, Time.now) unless arrive_at.empty?
-      @leave_at = Time.parse(leave_at, Time.now) unless leave_at.empty?
+      @arrive_at = parse_time(arrive_at)
+      @leave_at = parse_time(leave_at)
     end
+
+    def parse_time(time)
+      if time.empty? || time == '  :  '
+        nil
+      else
+        Time.parse(time, Time.now)
+      end
+    end
+
 
     def working_hour
       if @leave_at.nil? || @arrive_at.nil?

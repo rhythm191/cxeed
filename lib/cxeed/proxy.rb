@@ -4,7 +4,7 @@ require 'selenium-webdriver'
 module Cxeed
   class Proxy
     def initialize(credential)
-      caps = Selenium::WebDriver::Remote::Capabilities.chrome('chromeOptions': {args: %i(--headless --disable-gpu)})
+      caps = Selenium::WebDriver::Remote::Capabilities.chrome('chromeOptions': {args: %i(--headless --disable-gpu window-size=1920,1080)})
       @driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
 
       @credential = credential
@@ -99,6 +99,7 @@ module Cxeed
 
       # 検索
       @driver.find_element(:xpath, '//input[@name="srchbutton"]').click
+
 
       date = @driver.find_element(:xpath, '//td[@id="grdXyw1100G-rc-0-0"]/nobr').text
       arrive_at = @driver.find_element(:xpath, '//td[@id="grdXyw1100G-rc-0-6"]/nobr').text
