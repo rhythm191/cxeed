@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'thor'
 require 'cxeed'
 
@@ -63,5 +64,16 @@ module Cxeed
 
       puts "leave #{ time}"
     end
+
+    desc 'today', 'show today attendance'
+    def today
+      cred = Cxeed::Credential.new
+      proxy = Cxeed::Proxy.new cred
+
+      today = proxy.today
+
+      puts "today(#{ today.date.strftime('%m/%d') }) #{ today.attendance_time }"
+    end
+
   end
 end

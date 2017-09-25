@@ -66,5 +66,19 @@ module Cxeed
       # 登録処理
       @driver.find_element(:xpath, '//input[@name="regbutton"]').click
     end
+
+    def today
+      login
+
+      navigate_to_input_form
+
+      date = @driver.find_element(:xpath, '//td[@id="grdXyw1100G-rc-0-0"]/nobr').text
+      arrive_at = @driver.find_element(:xpath, '//td[@id="grdXyw1100G-rc-0-6"]/nobr').text
+      leave_at = @driver.find_element(:xpath, '//td[@id="grdXyw1100G-rc-0-9"]/nobr').text
+
+      today = Cxeed::Attendance.new date, arrive_at, leave_at
+
+      today
+    end
   end
 end
