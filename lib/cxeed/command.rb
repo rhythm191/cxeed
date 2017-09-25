@@ -75,5 +75,14 @@ module Cxeed
       puts "today(#{ today.date.strftime('%m/%d') }) #{ today.attendance_time }"
     end
 
+    desc 'day [%Y/%m/%d]', 'show day attendance default today'
+    def day(date = Time.now.strftime('%Y/%m/%d'))
+      cred = Cxeed::Credential.new
+      proxy = Cxeed::Proxy.new cred
+
+      attendance = proxy.day_attendance date
+
+      puts "#{ attendance.date.strftime('%Y/%m/%d') } #{ attendance.attendance_time }"
+    end
   end
 end

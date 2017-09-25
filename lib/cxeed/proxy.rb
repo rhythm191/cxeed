@@ -80,5 +80,31 @@ module Cxeed
 
       today
     end
+
+    def day_attendance(day)
+      login
+
+      navigate_to_input_form
+
+      # 日付の整形
+      day_str = DateTime.parse(day).strftime('%Y%m%d')
+
+      backspace = "\ue003"
+
+      # 処理期間の入力
+      @driver.find_element(:xpath, '//input[@name="StartYMD"]').send_keys(backspace * 8)
+      @driver.find_element(:xpath, '//input[@name="StartYMD"]').send_keys(day_str)
+      @driver.find_element(:xpath, '//input[@name="EndYMD"]').send_keys(backspace * 8)
+      @driver.find_element(:xpath, '//input[@name="EndYMD"]').send_keys(day_str)
+
+      # 検索
+      @driver.find_element(:xpath, '//input[@name="srchbutton"]').click
+
+      date = @driver.find_element(:xpath, '//td[@id="grdXyw1100G-rc-0-0"]/nobr').text
+      arrive_at = @driver.find_element(:xpath, '//td[@id="grdXyw1100G-rc-0-6"]/nobr').text
+      leave_at = @driver.find_element(:xpath,  '//td[@id="grdXyw1100G-rc-0-9"]/nobr').text
+
+      Cxeed::Attendance.new date, arrive_at, leave_at
+    end
   end
 end
