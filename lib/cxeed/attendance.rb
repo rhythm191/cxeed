@@ -24,12 +24,13 @@ module Cxeed
       if @leave_at.nil? || @arrive_at.nil?
         0
       else
-        (@leave_at - @arrive_at) / 3600
+        # TODO: 午前休とかに対応する
+        (@leave_at - @arrive_at) / 3600 - 1
       end
     end
 
     def attendance_time
-      "#{ @arrive_at&.strftime('%H:%M') } - #{ @leave_at&.strftime('%H:%M') } (#{ working_hour }) "
+      "#{ @arrive_at&.strftime('%H:%M') } - #{ @leave_at&.strftime('%H:%M') } (#{ '%.2f' % working_hour }) "
     end
   end
 end
