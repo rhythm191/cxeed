@@ -45,24 +45,24 @@ module Cxeed
       end
     end
 
-    desc 'arrive [time]', 'submit arrival time (time format is "%H:%M")'
-    def arrive(time = Time.now.strftime('%H:%M'))
+    desc 'arrive [time] [date]', 'submit arrival time (time format is "%H:%M") (date format 2017/09/27)'
+    def arrive(time = Time.now.strftime('%H:%M'), date = Time.now.strftime('%Y/%m/%d'))
       cred = Cxeed::Credential.new
       proxy = Cxeed::Proxy.new cred
 
-      proxy.arrive time
+      proxy.arrive time, DateTime.parse(date)
 
-      puts "arrive #{ time}"
+      puts "arrive #{ date } #{ time}"
     end
 
-    desc 'leave [time]', 'submit leave time (time format is "%H:%M")'
-    def leave(time = Time.now.strftime('%H:%M'))
+    desc 'leave [time] [date]', 'submit leave time (time format is "%H:%M") (date format 2017/09/27)'
+    def leave(time = Time.now.strftime('%H:%M'), date = Time.now.strftime('%Y/%m/%d'))
       cred = Cxeed::Credential.new
       proxy = Cxeed::Proxy.new cred
 
-      proxy.leave time
+      proxy.leave time, DateTime.parse(date)
 
-      puts "leave #{ time}"
+      puts "leave #{ date } #{ time }"
     end
 
     desc 'today', 'show today attendance'

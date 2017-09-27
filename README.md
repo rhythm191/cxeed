@@ -34,12 +34,16 @@ install it yourself as:
     $ cxeed arrive
     or
     $ cxeed arrive 10:00
+    or
+    $ cxeed arrive 10:00 2017/09/27
     
 退社を報告します。引数なしで現在の時刻を入力します。
 
     $ cxeed leave
     or
     $ cxeed leave 19:00
+    or
+    $ cxeed leave 19:00 2017/09/27
 
 今日の勤怠を見ます。
 

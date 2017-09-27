@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cxeed (0.2.1)
+    cxeed (0.3.0)
       selenium-webdriver
       thor
 

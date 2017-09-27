@@ -3,6 +3,8 @@ require 'selenium-webdriver'
 
 module Cxeed
   class Proxy
+    BACKSPACE = "\ue003".freeze
+
     def initialize(credential)
       caps = Selenium::WebDriver::Remote::Capabilities.chrome('chromeOptions': {args: %i(--headless --disable-gpu window-size=1920,1080)})
       @driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
@@ -41,10 +43,26 @@ module Cxeed
       @driver.switch_to.frame @driver.find_element(name: 'FRAME2')
     end
 
-    def arrive(time = Time.now.strftime('%H:%M'))
+    # 引数の日付の入力画面に遷移する
+    def open_date(date)
+      # 処理期間の入力
+      @driver.find_element(:xpath, '//input[@name="StartYMD"]').send_keys(BACKSPACE * 8)
+      @driver.find_element(:xpath, '//input[@name="StartYMD"]').send_keys(date.strftime('%Y%m%d'))
+      @driver.find_element(:xpath, '//input[@name="EndYMD"]').send_keys(BACKSPACE * 8)
+      @driver.find_element(:xpath, '//input[@name="EndYMD"]').send_keys(date.strftime('%Y%m%d'))
+
+      # 検索
+      @driver.find_element(:xpath, '//input[@name="srchbutton"]').click
+
+      @driver.save_screenshot 'hoge.png'
+    end
+
+    def arrive(time = Time.now.strftime('%H:%M'), date = Time.now)
       login
 
       navigate_to_input_form
+
+      open_date(date)
 
       # 出勤時間の入力
       work_field = @driver.find_element(:xpath, '//td[@id="grdXyw1100G-rc-0-6"]')
@@ -54,10 +72,12 @@ module Cxeed
       @driver.find_element(:xpath, '//input[@name="regbutton"]').click
     end
 
-    def leave(time = Time.now.strftime('%H:%M'))
+    def leave(time = Time.now.strftime('%H:%M'), date = Time.now)
       login
 
       navigate_to_input_form
+
+      open_date(date)
 
       # 退勤時間の入力
       work_field = @driver.find_element(:xpath, '//td[@id="grdXyw1100G-rc-0-9"]')
@@ -89,12 +109,10 @@ module Cxeed
       # 日付の整形
       day_str = DateTime.parse(day).strftime('%Y%m%d')
 
-      backspace = "\ue003"
-
       # 処理期間の入力
-      @driver.find_element(:xpath, '//input[@name="StartYMD"]').send_keys(backspace * 8)
+      @driver.find_element(:xpath, '//input[@name="StartYMD"]').send_keys(BACKSPACE * 8)
       @driver.find_element(:xpath, '//input[@name="StartYMD"]').send_keys(day_str)
-      @driver.find_element(:xpath, '//input[@name="EndYMD"]').send_keys(backspace * 8)
+      @driver.find_element(:xpath, '//input[@name="EndYMD"]').send_keys(BACKSPACE * 8)
       @driver.find_element(:xpath, '//input[@name="EndYMD"]').send_keys(day_str)
 
       # 検索
