@@ -53,8 +53,6 @@ module Cxeed
 
       # 検索
       @driver.find_element(:xpath, '//input[@name="srchbutton"]').click
-
-      @driver.save_screenshot 'hoge.png'
     end
 
     def arrive(time = Time.now.strftime('%H:%M'), date = Time.now)
