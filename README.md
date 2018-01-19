@@ -7,6 +7,7 @@ CYBER XEED ruby client
 install chrome driver
 
     $ brew install chromedriver
+    *chromedriver 2.35 is not run. use to chromedriver 2.32*
 
 
 install it yourself as:
