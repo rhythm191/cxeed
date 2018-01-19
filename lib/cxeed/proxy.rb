@@ -15,11 +15,11 @@ module Cxeed
     end
 
     def login
-      verbose_log 'start login'
+      puts '* start login' if @verbose
 
       @driver.navigate.to(@credential.login_url)
 
-      verbose_log "at #{ @driver.current_url }"
+      puts "* at #{ @driver.current_url }" if @verbose
       save_screenshot
 
       # 会社コード入力
@@ -30,15 +30,15 @@ module Cxeed
       @driver.find_element(:name, 'PassWord').send_keys(@credential.password)
 
 
-      verbose_log "input DataSource: #{ @driver.find_element(:name, 'DataSource').attribute('value')}"
-      verbose_log "input login id: #{ @driver.find_element(:name, 'LoginID').attribute('value')}"
-      verbose_log "input password: #{ @driver.find_element(:name, 'PassWord').attribute('value')}"
+      puts "* input DataSource: #{ @driver.find_element(:name, 'DataSource').attribute('value')}" if @verbose
+      puts "* input login id: #{ @driver.find_element(:name, 'LoginID').attribute('value')}" if @verbose
+      puts "* input password: #{ @driver.find_element(:name, 'PassWord').attribute('value')}" if @verbose
       save_screenshot
 
       # ログイン処理
       @driver.find_element(:xpath, '//td[@class="loginBtn"]/a').click
 
-      verbose_log "after click login page: #{ @driver.current_url }"
+      puts "* after click login page: #{ @driver.current_url }" if @verbose
       save_screenshot
     end
 
@@ -49,7 +49,7 @@ module Cxeed
     end
 
     def navigate_to_input_form
-      verbose_log "start navigate input form: frame2=#{ @driver.find_element(:name, 'FRAME2').attribute('src') }"
+      puts "* start navigate input form: frame2=#{ @driver.find_element(:name, 'FRAME2').attribute('src') }" if @verbose
       save_screenshot
 
       # frameの指定
@@ -62,13 +62,13 @@ module Cxeed
       # frameの指定
       @driver.switch_to.frame @driver.find_element(name: 'FRAME2')
 
-      verbose_log "finish navigate input form: #{ @driver.current_url }"
+      puts "* finish navigate input form: #{ @driver.current_url }" if @verbose
       save_screenshot
     end
 
     # 引数の日付の入力画面に遷移する
     def open_date(date)
-      verbose_log "start open date command: #{ @driver.current_url }: #{ @driver.find_element(:class, 'cxCmnTitleStr').text }"
+      puts "* start open date command: #{ @driver.current_url }: #{ @driver.find_element(:class, 'cxCmnTitleStr').text }" if @verbose
 
       # 処理期間の入力
       @driver.find_element(:xpath, '//input[@name="StartYMD"]').send_keys(BACKSPACE * 8)
@@ -77,14 +77,14 @@ module Cxeed
       @driver.find_element(:xpath, '//input[@name="EndYMD"]').send_keys(date.strftime('%Y%m%d'))
 
 
-      verbose_log "input start date: #{  @driver.find_element(:xpath, '//input[@name="StartYMD"]').attribute('value') }"
-      verbose_log "input end date: #{  @driver.find_element(:xpath, '//input[@name="EndYMD"]').attribute('value') }"
+      puts "* input start date: #{  @driver.find_element(:xpath, '//input[@name="StartYMD"]').attribute('value') }" if @verbose
+      puts "* input end date: #{  @driver.find_element(:xpath, '//input[@name="EndYMD"]').attribute('value') }" if @verbose
       save_screenshot
 
       # 検索
       @driver.find_element(:xpath, '//input[@name="srchbutton"]').click
 
-      verbose_log "after click search button: #{ @driver.current_url }"
+      puts "* after click search button: #{ @driver.current_url }" if @verbose
       save_screenshot
     end
 
@@ -103,7 +103,7 @@ module Cxeed
       # 登録処理
       @driver.find_element(:xpath, '//input[@name="regbutton"]').click
 
-      verbose_log "after click register button: #{ @driver.current_url }"
+      puts "* after click register button: #{ @driver.current_url }" if @verbose
       save_screenshot
     end
 
@@ -122,7 +122,7 @@ module Cxeed
       # 登録処理
       @driver.find_element(:xpath, '//input[@name="regbutton"]').click
 
-      verbose_log "after click register button: #{ @driver.current_url }"
+      puts "* after click register button: #{ @driver.current_url }" if @verbose
       save_screenshot
     end
 
@@ -167,7 +167,7 @@ module Cxeed
 
     private
 
-    def verbose_log(output_string)
+    def puts(output_string)
       puts "* #{ output_string }" if @verbose
     end
 
