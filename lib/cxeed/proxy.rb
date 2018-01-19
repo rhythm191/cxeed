@@ -5,15 +5,22 @@ module Cxeed
   class Proxy
     BACKSPACE = "\ue003".freeze
 
-    def initialize(credential)
+    def initialize(credential, verbose: false, save_screenshot: false)
       caps = Selenium::WebDriver::Remote::Capabilities.chrome('chromeOptions': {args: %i(--headless --disable-gpu window-size=1920,1080)})
       @driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
 
       @credential = credential
+      @verbose = verbose
+      @save_screenshot = save_screenshot
     end
 
     def login
+      verbose_log 'start login'
+
       @driver.navigate.to(@credential.login_url)
+
+      verbose_log "at #{ @driver.current_url }"
+      save_screenshot
 
       # 会社コード入力
       @driver.find_element(:name, 'DataSource').send_keys(@credential.company_code)
@@ -21,8 +28,18 @@ module Cxeed
       @driver.find_element(:name, 'LoginID').send_keys(@credential.employee_code)
       # パスワード入力
       @driver.find_element(:name, 'PassWord').send_keys(@credential.password)
+
+
+      verbose_log "input DataSource: #{ @driver.find_element(:name, 'DataSource').attribute('value')}"
+      verbose_log "input login id: #{ @driver.find_element(:name, 'LoginID').attribute('value')}"
+      verbose_log "input password: #{ @driver.find_element(:name, 'PassWord').attribute('value')}"
+      save_screenshot
+
       # ログイン処理
       @driver.find_element(:xpath, '//td[@class="loginBtn"]/a').click
+
+      verbose_log "after click login page: #{ @driver.current_url }"
+      save_screenshot
     end
 
     def login_test
@@ -32,6 +49,9 @@ module Cxeed
     end
 
     def navigate_to_input_form
+      verbose_log "start navigate input form: frame2=#{ @driver.find_element(:name, 'FRAME2').attribute('src') }"
+      save_screenshot
+
       # frameの指定
       @driver.switch_to.frame @driver.find_element(id: 'FRAME1')
       # 勤務データ入力遷移
@@ -41,18 +61,31 @@ module Cxeed
       @driver.switch_to.default_content
       # frameの指定
       @driver.switch_to.frame @driver.find_element(name: 'FRAME2')
+
+      verbose_log "finish navigate input form: #{ @driver.current_url }"
+      save_screenshot
     end
 
     # 引数の日付の入力画面に遷移する
     def open_date(date)
+      verbose_log "start open date command: #{ @driver.current_url }: #{ @driver.find_element(:class, 'cxCmnTitleStr').text }"
+
       # 処理期間の入力
       @driver.find_element(:xpath, '//input[@name="StartYMD"]').send_keys(BACKSPACE * 8)
       @driver.find_element(:xpath, '//input[@name="StartYMD"]').send_keys(date.strftime('%Y%m%d'))
       @driver.find_element(:xpath, '//input[@name="EndYMD"]').send_keys(BACKSPACE * 8)
       @driver.find_element(:xpath, '//input[@name="EndYMD"]').send_keys(date.strftime('%Y%m%d'))
 
+
+      verbose_log "input start date: #{  @driver.find_element(:xpath, '//input[@name="StartYMD"]').attribute('value') }"
+      verbose_log "input end date: #{  @driver.find_element(:xpath, '//input[@name="EndYMD"]').attribute('value') }"
+      save_screenshot
+
       # 検索
       @driver.find_element(:xpath, '//input[@name="srchbutton"]').click
+
+      verbose_log "after click search button: #{ @driver.current_url }"
+      save_screenshot
     end
 
     def arrive(time = Time.now.strftime('%H:%M'), date = Time.now)
@@ -65,9 +98,13 @@ module Cxeed
       # 出勤時間の入力
       work_field = @driver.find_element(:xpath, '//td[@id="grdXyw1100G-rc-0-6"]')
       @driver.action.send_keys(work_field, time).perform
+      save_screenshot
 
       # 登録処理
       @driver.find_element(:xpath, '//input[@name="regbutton"]').click
+
+      verbose_log "after click register button: #{ @driver.current_url }"
+      save_screenshot
     end
 
     def leave(time = Time.now.strftime('%H:%M'), date = Time.now)
@@ -80,9 +117,13 @@ module Cxeed
       # 退勤時間の入力
       work_field = @driver.find_element(:xpath, '//td[@id="grdXyw1100G-rc-0-9"]')
       @driver.action.send_keys(work_field, time).perform
+      save_screenshot
 
       # 登録処理
       @driver.find_element(:xpath, '//input[@name="regbutton"]').click
+
+      verbose_log "after click register button: #{ @driver.current_url }"
+      save_screenshot
     end
 
     def today
@@ -123,5 +164,20 @@ module Cxeed
 
       Cxeed::Attendance.new date, arrive_at, leave_at
     end
+
+    private
+
+    def verbose_log(output_string)
+      puts "* #{ output_string }" if @verbose
+    end
+
+    def frame_source(frame_name)
+      @driver.find_element(:name, frame_name).attribute('src')
+    end
+
+    def save_screenshot
+      @driver.save_screenshot("./cxeed_#{ Time.now.strftime('%Y%m%d%H%M%S%L') }.png") if @save_screenshot
+    end
+
   end
 end

@@ -34,9 +34,11 @@ module Cxeed
     end
 
     desc 'login_test', 'login_test'
+    method_option :verbose, :aliases => '-v', :desc => 'Make the operation more talkative'
+    method_option :save_screenshot, :aliases => '-s', :desc => 'Save debug screenshot'
     def login_test
       cred = Cxeed::Credential.new
-      proxy = Cxeed::Proxy.new cred
+      proxy = Cxeed::Proxy.new cred, verbose: options.key?(:verbose), save_screenshot: options.key?(:save_screenshot)
 
       if proxy.login_test != cred.login_url
         say 'login success'
@@ -46,9 +48,12 @@ module Cxeed
     end
 
     desc 'arrive [time] [date]', 'submit arrival time (time format is "%H:%M") (date format 2017/09/27)'
+    method_option :verbose, :aliases => '-v', :desc => 'Make the operation more talkative'
+    method_option :save_screenshot, :aliases => '-s', :desc => 'Save debug screenshot'
     def arrive(time = Time.now.strftime('%H:%M'), date = Time.now.strftime('%Y/%m/%d'))
+
       cred = Cxeed::Credential.new
-      proxy = Cxeed::Proxy.new cred
+      proxy = Cxeed::Proxy.new cred, verbose: options.key?(:verbose), save_screenshot: options.key?(:save_screenshot)
 
       proxy.arrive time, DateTime.parse(date)
 
@@ -56,9 +61,13 @@ module Cxeed
     end
 
     desc 'leave [time] [date]', 'submit leave time (time format is "%H:%M") (date format 2017/09/27)'
+    method_option :verbose, :aliases => '-v', :desc => 'Make the operation more talkative'
+    method_option :save_screenshot, :aliases => '-s', :desc => 'Save debug screenshot'
     def leave(time = Time.now.strftime('%H:%M'), date = Time.now.strftime('%Y/%m/%d'))
+      verbose = options.key? :verbose
+
       cred = Cxeed::Credential.new
-      proxy = Cxeed::Proxy.new cred
+      proxy = Cxeed::Proxy.new cred, verbose: options.key?(:verbose), save_screenshot: options.key?(:save_screenshot)
 
       proxy.leave time, DateTime.parse(date)
 
@@ -66,9 +75,11 @@ module Cxeed
     end
 
     desc 'today', 'show today attendance'
+    method_option :verbose, :aliases => '-v', :desc => 'Make the operation more talkative'
+    method_option :save_screenshot, :aliases => '-s', :desc => 'Save debug screenshot'
     def today
       cred = Cxeed::Credential.new
-      proxy = Cxeed::Proxy.new cred
+      proxy = Cxeed::Proxy.new cred, verbose: options.key?(:verbose), save_screenshot: options.key?(:save_screenshot)
 
       today = proxy.today
 
@@ -76,9 +87,10 @@ module Cxeed
     end
 
     desc 'attendance date(format: %Y/%m/%d)', 'show day attendance'
+    method_option :verbose, :aliases => '-v', :desc => 'Make the operation more talkative'
     def attendance(date)
       cred = Cxeed::Credential.new
-      proxy = Cxeed::Proxy.new cred
+      proxy = Cxeed::Proxy.new cred, verbose: options.key?(:verbose), save_screenshot: options.key?(:save_screenshot)
 
       attendance = proxy.day_attendance date
 
