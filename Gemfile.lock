@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cxeed (0.3.0)
+    cxeed (0.3.3)
       selenium-webdriver
       thor
 
@@ -42,4 +42,4 @@ DEPENDENCIES
   rspec (~> 3.0)
 
 BUNDLED WITH
-   1.15.4
+   1.16.1

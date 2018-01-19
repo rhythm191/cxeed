@@ -38,7 +38,7 @@ module Cxeed
       cred = Cxeed::Credential.new
       proxy = Cxeed::Proxy.new cred
 
-      if proxy.login_test == 'https://cxg2.i-abs.co.jp/cyberx/Xgw0001.asp?CxClientDispFlg=0'
+      if proxy.login_test != cred.login_url
         say 'login success'
       else
         say 'login fail'
