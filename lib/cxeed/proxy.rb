@@ -55,12 +55,9 @@ module Cxeed
       # frameの指定
       @driver.switch_to.frame @driver.find_element(id: 'FRAME1')
       # 勤務データ入力遷移
-      @driver.find_element(:xpath, '//a[@title="勤務データ入力"]').click
+      input_form_url = @driver.find_element(:xpath, '//a[@title="勤務データ入力"]').attribute('href')
 
-      # 一旦main documentに戻る
-      @driver.switch_to.default_content
-      # frameの指定
-      @driver.switch_to.frame @driver.find_element(name: 'FRAME2')
+      @driver.navigate.to(input_form_url)
 
       puts "* finish navigate input form: #{ @driver.current_url }" if @verbose
       save_screenshot
@@ -166,10 +163,6 @@ module Cxeed
     end
 
     private
-
-    def puts(output_string)
-      puts "* #{ output_string }" if @verbose
-    end
 
     def frame_source(frame_name)
       @driver.find_element(:name, frame_name).attribute('src')
