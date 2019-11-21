@@ -7,6 +7,8 @@ CYBER XEED ruby client
 install chrome driver
 
     $ brew install chromedriver
+    or
+    $ brew cask install chromedriver
 
 
 install it yourself as:
